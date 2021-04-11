@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: inventory-management
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: http://localhost:9090
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/dev
