@@ -2,8 +2,8 @@ package com.pedro.cruzeiro.dev.inventorymanagement.exception;
 
 import java.util.List;
 
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.constant.InventoryManagementConstants.COLON_WHITE_SPACE_DELIMITER;
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.constant.InventoryManagementConstants.WHITE_SPACE_DELIMITER;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.COLON_WHITE_SPACE_DELIMITER;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.WHITE_SPACE_DELIMITER;
 
 public class InvalidResourceStatusException extends RuntimeException {
 

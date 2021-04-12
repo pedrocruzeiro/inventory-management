@@ -1,8 +1,14 @@
-package com.pedro.cruzeiro.dev.inventorymanagement.exception.handler;
+package com.pedro.cruzeiro.dev.inventorymanagement.controller;
+
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.API_OPERATION;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.API_OPERATION_HEADER;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.TRACE_ID;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.TRACE_ID_HEADER;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.UNDEFINED_SERVICE_OPERATION;
 
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.ErrorMessageResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.InvalidResourceStatusException;
-import com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.constant.InventoryManagementConstants;
+import com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
@@ -19,11 +25,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Optional;
 
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.constant.InventoryManagementConstants.*;
+
 
 @Slf4j
 @ControllerAdvice
-public class InventoryManagementExceptionHandler implements ResponseBodyAdvice<Object> {
+public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidResourceStatusException.class)
@@ -37,8 +43,8 @@ public class InventoryManagementExceptionHandler implements ResponseBodyAdvice<O
         return new ResponseEntity<>(
                 ErrorMessageResponse.builder()
                         .timestamp(MDC.get(InventoryManagementConstants.TIMESTAMP))
-                        .traceId(MDC.get(InventoryManagementConstants.TRACE_ID))
-                        .operation(MDC.get(InventoryManagementConstants.SERVICE_OPERATION))
+                        .traceId(MDC.get(TRACE_ID))
+                        .operation(MDC.get(API_OPERATION))
                         .code(httpStatus.value())
                         .message(msg)
                         .build(),
@@ -56,9 +62,8 @@ public class InventoryManagementExceptionHandler implements ResponseBodyAdvice<O
                                   ServerHttpResponse serverHttpResponse) {
 
         serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
-        serverHttpResponse.getHeaders().add(SERVICE_OPERATION_HEADER,
-                Optional.ofNullable(MDC.get(SERVICE_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
-
+        serverHttpResponse.getHeaders().add(API_OPERATION_HEADER,
+                Optional.ofNullable(MDC.get(API_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
 
         return body;
     }

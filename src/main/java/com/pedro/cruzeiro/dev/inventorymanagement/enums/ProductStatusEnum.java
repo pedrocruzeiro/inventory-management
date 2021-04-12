@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.InvalidResourceStatusException;
 import org.springframework.util.StringUtils;
 
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.constant.InventoryManagementConstants.PRODUCT;
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.PRODUCT;
 
 public enum ProductStatusEnum
 
@@ -15,7 +15,7 @@ public enum ProductStatusEnum
     AVAILABLE, UNAVAILABLE, DISCONTINUED, ORDERED;
 
     public static ProductStatusEnum fromName(String name) {
-        if (StringUtils.isEmpty(name)) {
+        if (name.isEmpty()) {
             return null;
         }
         Optional<ProductStatusEnum> itemStatus = Arrays.stream(values()).filter(e -> e.name().equals(name)).findFirst();
