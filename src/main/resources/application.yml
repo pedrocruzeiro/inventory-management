@@ -8,4 +8,4 @@ spring:
         url: http://localhost:9090
   data:
     mongodb:
-      uri: mongodb://localhost:27017/dev
+      uri: mongodb://mongo-db:27017/dev

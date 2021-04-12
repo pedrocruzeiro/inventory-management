@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pedro.cruzeiro.dev</groupId>
 	<artifactId>inventory-management</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.6</version>
 	<name>Inventory Management</name>
 	<description>A standalone Spring Boot backend microservice to manage inventory</description>
 	<properties>
