@@ -16,6 +16,7 @@ public class InventoryManagementConstants {
 	/**
 	 * MDC Keys
 	 */
+	public static final String USER_ID = "userId";
 	public static final String API_OPERATION = "operation";
 	public static final String TRACE_ID = "trace-id";
 	public static final String TIMESTAMP = "timestamp";
