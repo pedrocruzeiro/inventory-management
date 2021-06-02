@@ -1,0 +1,11 @@
+spring:
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: http://mongo-db:9090
+  data:
+    mongodb:
+      uri: mongodb://mongo-db:27017/dev
+server:
+  port: 8080

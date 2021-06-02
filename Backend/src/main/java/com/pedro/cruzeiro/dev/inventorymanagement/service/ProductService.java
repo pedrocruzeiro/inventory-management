@@ -6,19 +6,26 @@ import com.pedro.cruzeiro.dev.inventorymanagement.dto.in.UpdateProductRequest;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.CreateProductResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.GetProductResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.UpdateProductResponse;
+import com.pedro.cruzeiro.dev.inventorymanagement.model.Product;
+import com.pedro.cruzeiro.dev.inventorymanagement.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.criteria.CriteriaBuilder.In;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
-
+@Service
+@RequiredArgsConstructor
 public class ProductService {
 
-	public CreateProductResponse createProduct(CreateProductRequest request) {
+	private final ModelMapper modelMapper;
+	private final ProductRepository productRepository;
 
-		return CreateProductResponse.builder().
-				productId(UUID.randomUUID().toString()).
-				build();
+	public CreateProductResponse createProduct(CreateProductRequest request) {
+		Product product = modelMapper.map(request,Product.class);
+		return modelMapper.map(productRepository.save(product),CreateProductResponse.class);
 	}
 
 	public void deleteProduct(String productId) {
@@ -35,14 +42,12 @@ public class ProductService {
 				build();
 	}
 
-	public void restock(String productId ,Integer quantity) {
+	public void restock(String productId, Integer quantity) {
 	}
 
 	public List<GetProductResponse> getProducts() {
-
-		ArrayList response = new ArrayList<GetProductResponse>();
-
-	return response;
+		List<Product> products = productRepository.findAll();
+		return products.stream().map(product -> modelMapper.map(product, GetProductResponse.class)).collect(Collectors.toList());
 	}
 
 	public void updateProductAvailability(UpdateProductAvailability request) {

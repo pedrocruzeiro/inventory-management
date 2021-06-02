@@ -49,19 +49,14 @@ public class MdcContextProviderHandler implements HandlerInterceptor {
 						.isEmpty()) {
 					MDC.put(TRACE_ID, MDC.get(UUID.randomUUID().toString()));
 				}
+				else {
+					MDC.put(TRACE_ID, request.getHeader(TRACE_ID_HEADER));
+				}
 
 			}
 
 		}
 		return true;
-	}
-
-	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-			@Nullable Exception ex) {
-		if (response.getHeader(TRACE_ID_HEADER).isEmpty()) {
-			response.setHeader(TRACE_ID_HEADER, MDC.get(TRACE_ID));
-		}
 	}
 
 }

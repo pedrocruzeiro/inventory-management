@@ -37,7 +37,7 @@ public class CreateProductRequest {
     @NotNull
     @Positive
     private BigDecimal price;
-    private List<ProductAttributes> attributes;
+    private List<ProductAttributesDto> attributes;
     @NotNull
     @Positive
     private BigDecimal stock;

@@ -31,6 +31,6 @@ public class UpdateProductRequest {
 
 	private BigDecimal price;
 
-	private List<ProductAttributes> attributes;
+	private List<ProductAttributesDto> attributes;
 
 }

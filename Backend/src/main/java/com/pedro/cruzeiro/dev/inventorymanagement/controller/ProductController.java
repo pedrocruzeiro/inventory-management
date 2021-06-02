@@ -21,6 +21,7 @@ import com.pedro.cruzeiro.dev.inventorymanagement.util.annotation.RequiredHeader
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,22 +37,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/v1")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
 	private final ProductService productService;
 
-	@PostMapping(value = "/product", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/products", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@APIOperation(CREATE_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
 	public ResponseEntity<CreateProductResponse> createProduct(
 			@RequestBody @Valid CreateProductRequest request
 	) {
-
+		log.info("Create Product Request");
 		return new ResponseEntity<>(productService.createProduct(request), HttpStatus.OK);
 	}
 
-	@PatchMapping("/product/{id}")
+	@PatchMapping("/products/{id}")
 	@APIOperation(UPDATE_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
@@ -62,7 +64,7 @@ public class ProductController {
 		return new ResponseEntity<>(productService.updateProduct(request), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/product/{id}")
+	@DeleteMapping("/products/{id}")
 	@APIOperation(DELETE_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
@@ -75,7 +77,7 @@ public class ProductController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@GetMapping("/product/{id}")
+	@GetMapping("/products/{id}")
 	@APIOperation(GET_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
@@ -86,7 +88,7 @@ public class ProductController {
 		return new ResponseEntity<>(productService.getProduct(productId), HttpStatus.OK);
 	}
 
-	@GetMapping("/product")
+	@GetMapping("/products")
 	@APIOperation(GET_PRODUCTS_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
@@ -96,7 +98,7 @@ public class ProductController {
 	}
 
 
-	@PatchMapping("/product/{id}/restock/{quantity}")
+	@PatchMapping("/products/{id}/restock/{quantity}")
 	@APIOperation(RESTOCK_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders({USER_ID})
@@ -110,7 +112,7 @@ public class ProductController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PatchMapping("/product/{id}/status")
+	@PatchMapping("/products/{id}/status")
 	@APIOperation("updateProductAvailability")
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)

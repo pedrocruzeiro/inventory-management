@@ -64,7 +64,10 @@ public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<O
         serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
         serverHttpResponse.getHeaders().add(API_OPERATION_HEADER,
                 Optional.ofNullable(MDC.get(API_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
-
+        if(!serverHttpRequest.getHeaders().containsKey(TRACE_ID_HEADER)){
+            serverHttpResponse.getHeaders().add(TRACE_ID_HEADER,MDC.get(TRACE_ID));
+        }
+        serverHttpResponse.getHeaders().add("Access-Control-Allow-Origin","*");
         return body;
     }
 }
