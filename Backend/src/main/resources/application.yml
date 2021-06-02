@@ -2,4 +2,4 @@ spring:
   application:
     name: inventory-management
   profiles:
-    active: local
+    active: dev
