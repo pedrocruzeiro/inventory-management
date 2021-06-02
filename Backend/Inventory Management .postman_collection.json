@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "72bd54c1-0aea-4767-9698-fd6f80a8b83e",
+		"name": "Inventory Management ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Iphone Product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Apple iPhone 12 - 128GB - Black\",\r\n  \"description\": \"The iPhone 12 and iPhone 12 mini are Apple's mainstream flagship iPhones for 2020. The phones come in 6.1-inch and 5.4-inch sizes with identical features, including support for faster 5G cellular networks, OLED displays, improved cameras, and Apple's latest A14 chip, all in a completely refreshed design.\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"productId\": \"0194252031216\",\r\n  \"barcode\": \"ABC-abc-1234\",\r\n  \"price\": 1.0,\r\n  \"attributes\": [\r\n    {\r\n      \"attribute\": \"Operating System\",\r\n      \"value\": \"IOS\"\r\n    }\r\n  ],\r\n  \"stock\": 1.0,\r\n  \"status\": \"AVAILABLE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env_protocol}}://{{env_host}}:{{env_port}}/v1/products",
+					"protocol": "{{env_protocol}}",
+					"host": [
+						"{{env_host}}"
+					],
+					"port": "{{env_port}}",
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Samsung Product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Apple iPhone 12 - 128GB - Black\",\r\n  \"description\": \"The iPhone 12 and iPhone 12 mini are Apple's mainstream flagship iPhones for 2020. The phones come in 6.1-inch and 5.4-inch sizes with identical features, including support for faster 5G cellular networks, OLED displays, improved cameras, and Apple's latest A14 chip, all in a completely refreshed design.\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"productId\": \"0194252031216\",\r\n  \"barcode\": \"ABC-abc-1234\",\r\n  \"price\": 1.0,\r\n  \"attributes\": [\r\n    {\r\n      \"attribute\": \"Operating System\",\r\n      \"value\": \"IOS\"\r\n    }\r\n  ],\r\n  \"stock\": 1.0,\r\n  \"status\": \"AVAILABLE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{env_protocol}}://{{env_host}}:{{env_port}}/v1/products",
+					"protocol": "{{env_protocol}}",
+					"host": [
+						"{{env_host}}"
+					],
+					"port": "{{env_port}}",
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{env_protocol}}://{{env_host}}:{{env_port}}/v1/products",
+					"protocol": "{{env_protocol}}",
+					"host": [
+						"{{env_host}}"
+					],
+					"port": "{{env_port}}",
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
