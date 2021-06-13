@@ -47,9 +47,6 @@
           </template>
           <v-card>
             
-          </v-card>
-          <v-card>
-            
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
@@ -115,6 +112,7 @@
                     <v-text-field
                       v-model="editedItem.price"
                       label="Price"
+                      prefix="€"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -132,10 +130,12 @@
                     sm="6"
                     md="4"
                   >
-                    <v-text-field
-                      v-model="editedItem.status"
-                      label="Status"
-                    ></v-text-field>
+                  <v-combobox 
+                    v-model="editedItem.status"
+                    label="Status"
+                    :items="status"
+                    >
+                  </v-combobox>
                   </v-col>
                 </v-row>
               </v-container>
@@ -208,6 +208,12 @@ import axios from "axios";
       myloadingvariable: false,
       dialog: false,
       dialogDelete: false,
+      status: [
+          'AVAILABLE', 
+          'UNAVAILABLE', 
+          'DISCONTINUED', 
+          'ORDERED',
+        ],
       search: '',
         headers: [
           {
@@ -233,6 +239,7 @@ import axios from "axios";
       manufacturer: '',
       productId: '',
       String: '',
+      price: 0.0,
       stock: 0.0,
       status: '',
       },
@@ -255,6 +262,30 @@ import axios from "axios";
       },
     },
     methods: {
+      addProduct(item){
+        console.log(item)
+        axios.post("http://localhost:8081/v1/products",
+      {
+        "name": item.name,
+        "description": item.description,
+        "manufacturer": item.manufacturer,
+        "productId": item.productId,
+        "barcode": item.barcode,
+        "price": item.price,
+        "stock": item.stock,
+        "status": item.status
+}
+      )
+      .then((response) => {
+        console.log(response.data)
+        this.posts = response.data
+        this.myloadingvariable = false
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+      
+    },
       getPosts(){
       axios.get("https://jsonplaceholder.typicode.com/posts")
       .then((response) => {
@@ -315,6 +346,7 @@ import axios from "axios";
         if (this.editedIndex > -1) {
           Object.assign(this.posts[this.editedIndex], this.editedItem)
         } else {
+          this.addProduct(this.editedItem)
           this.products.push(this.editedItem)
         }
         this.close()
