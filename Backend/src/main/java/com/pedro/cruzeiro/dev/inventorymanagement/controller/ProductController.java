@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -46,6 +47,7 @@ public class ProductController {
 	@APIOperation(CREATE_PRODUCT_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
+	@CrossOrigin
 	public ResponseEntity<CreateProductResponse> createProduct(
 			@RequestBody @Valid CreateProductRequest request
 	) {
@@ -89,6 +91,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/products")
+	@CrossOrigin
 	@APIOperation(GET_PRODUCTS_API_OPERATION)
 	@RequiredHeaders(USER_ID)
 	@MdcContextHeaders(USER_ID)
