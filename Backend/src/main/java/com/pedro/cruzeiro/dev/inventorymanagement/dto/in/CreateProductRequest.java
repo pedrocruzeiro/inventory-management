@@ -1,7 +1,6 @@
 package com.pedro.cruzeiro.dev.inventorymanagement.dto.in;
 
 import com.pedro.cruzeiro.dev.inventorymanagement.enums.ProductStatusEnum;
-import com.pedro.cruzeiro.dev.inventorymanagement.model.ProductAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,26 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateProductRequest {
 
-    @NotNull
-    @NotEmpty
-    private String name;
-    @NotEmpty
-    private String description;
-    @NotEmpty
-    private String manufacturer;
-    @NotNull
-    @NotEmpty
-    private String productId;
-    @NotNull
-    @NotEmpty
-    private String barcode;
-    @NotNull
-    @Positive
-    private BigDecimal price;
-    private List<ProductAttributesDto> attributes;
-    @NotNull
-    @Positive
-    private BigDecimal stock;
-    @Enumerated(EnumType.STRING)
-    private ProductStatusEnum status;
+  @NotNull @NotEmpty private String name;
+  @NotEmpty private String description;
+  @NotEmpty private String manufacturer;
+  @NotNull @NotEmpty private String barcode;
+  @NotNull @Positive private BigDecimal price;
+  private List<ProductAttributesDto> attributes;
+  @NotNull @Positive private BigDecimal stock;
+
+  @Enumerated(EnumType.STRING)
+  private ProductStatusEnum status;
 }

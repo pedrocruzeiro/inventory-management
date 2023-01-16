@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorMessageResponse
-{
-    private String timestamp;
-    private String traceId;
-    private String operation;
-    private int code;
-    private String message;
+public class ErrorMessageResponse {
+  private String requestTimestamp;
+  private String traceId;
+  private String operation;
+  private int code;
+  private String message;
 }

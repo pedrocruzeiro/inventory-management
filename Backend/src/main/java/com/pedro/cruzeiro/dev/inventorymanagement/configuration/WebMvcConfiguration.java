@@ -8,21 +8,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
 @Configuration
 public class WebMvcConfiguration {
 
-	@Bean
-	public WebMvcConfigurer initializerWebMvcConfigurer(MdcContextProviderHandler mdcContextProviderHandler,
-			HttpLoggerHandler loggingHandler, HeaderValidationHandler headerValidationHandlerInterceptor) {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addInterceptors(InterceptorRegistry registry) {
-				registry.addInterceptor(mdcContextProviderHandler);
-				registry.addInterceptor(loggingHandler);
-				registry.addInterceptor(headerValidationHandlerInterceptor);
-			}
-		};
-	}
+  @Bean
+  public WebMvcConfigurer initializerWebMvcConfigurer(
+      MdcContextProviderHandler mdcContextProviderHandler,
+      HttpLoggerHandler loggingHandler,
+      HeaderValidationHandler headerValidationHandlerInterceptor) {
+    return new WebMvcConfigurer() {
+      @Override
+      public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(mdcContextProviderHandler);
+        registry.addInterceptor(loggingHandler);
+        registry.addInterceptor(headerValidationHandlerInterceptor);
+      }
+    };
+  }
 }
-

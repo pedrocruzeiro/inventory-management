@@ -3,15 +3,19 @@ All technical changes ill be documented in this file.
 
 ## [Unreleased]
 
+## [0.0.8] - 2023-01-16
+### Added
+* Added Update Product service operation
+* Added Delete Product service operation
+* Added Get Product service operation
+### Changed
+* Removed productId from request of Create Product controller
+* Updated Get Product operation response
+
 ## [0.0.7] - 2021-06-02
 ### Added
 * Created service operations for Product Controller.
 * Created ProductRepository for Mongo integration.
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
 
 ## [0.0.1] - 2020-10-03
 ### Added

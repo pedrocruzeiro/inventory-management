@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductAttributesDto {
 
-    String attribute;
-    String value;
+  String attribute;
+  String value;
 }

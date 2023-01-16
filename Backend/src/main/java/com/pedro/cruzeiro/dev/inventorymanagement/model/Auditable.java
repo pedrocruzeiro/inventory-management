@@ -17,13 +17,8 @@ import java.time.Instant;
 @NoArgsConstructor
 public class Auditable {
 
-    @CreatedBy
-    private String createdBy;
-    @LastModifiedDate
-    private Instant modifiedAt;
-    @CreatedDate
-    private Instant createdAt;
-    @LastModifiedBy
-    private String lastModifiedBy;
-
+  @CreatedBy private String createdBy;
+  @LastModifiedDate private Instant modifiedAt;
+  @CreatedDate private Instant createdAt;
+  @LastModifiedBy private String lastModifiedBy;
 }

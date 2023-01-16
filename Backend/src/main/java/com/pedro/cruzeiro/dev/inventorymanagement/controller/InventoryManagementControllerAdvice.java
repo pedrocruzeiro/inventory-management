@@ -1,14 +1,8 @@
 package com.pedro.cruzeiro.dev.inventorymanagement.controller;
 
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.API_OPERATION;
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.API_OPERATION_HEADER;
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.TRACE_ID;
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.TRACE_ID_HEADER;
-import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.UNDEFINED_SERVICE_OPERATION;
-
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.ErrorMessageResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.InvalidResourceStatusException;
-import com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants;
+import com.pedro.cruzeiro.dev.inventorymanagement.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
@@ -25,49 +19,65 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Optional;
 
-
+import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.*;
 
 @Slf4j
 @ControllerAdvice
 public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<Object> {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidResourceStatusException.class)
-    public ResponseEntity<ErrorMessageResponse> handleBadRequestInvalidResourceStatus(
-            InvalidResourceStatusException e) {
-        return buildErrorMessageResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(InvalidResourceStatusException.class)
+  public ResponseEntity<ErrorMessageResponse> handleBadRequestInvalidResourceStatus(
+      InvalidResourceStatusException e) {
+    return buildErrorMessageResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+  }
 
-    private ResponseEntity<ErrorMessageResponse> buildErrorMessageResponseEntity(String msg, HttpStatus httpStatus) {
-        log.error(msg);
-        return new ResponseEntity<>(
-                ErrorMessageResponse.builder()
-                        .timestamp(MDC.get(InventoryManagementConstants.TIMESTAMP))
-                        .traceId(MDC.get(TRACE_ID))
-                        .operation(MDC.get(API_OPERATION))
-                        .code(httpStatus.value())
-                        .message(msg)
-                        .build(),
-                httpStatus);
-    }
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(ProductNotFoundException.class)
+  public ResponseEntity<ErrorMessageResponse> handleProductNotFoundException(
+          ProductNotFoundException e) {
+    return buildErrorMessageResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+  }
 
-    @Override
-    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-        return true;
-    }
+  private ResponseEntity<ErrorMessageResponse> buildErrorMessageResponseEntity(
+      String msg, HttpStatus httpStatus) {
+    log.error(msg);
+    return new ResponseEntity<>(
+        ErrorMessageResponse.builder()
+            .requestTimestamp(MDC.get(TIMESTAMP))
+            .traceId(MDC.get(TRACE_ID))
+            .operation(MDC.get(API_OPERATION))
+            .code(httpStatus.value())
+            .message(msg)
+            .build(),
+        httpStatus);
+  }
 
-    @Override
-    public Object beforeBodyWrite(Object body, MethodParameter methodParameter, MediaType mediaType,
-                                  Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest,
-                                  ServerHttpResponse serverHttpResponse) {
+  @Override
+  public boolean supports(
+      MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
+    return true;
+  }
 
-        serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
-        serverHttpResponse.getHeaders().add(API_OPERATION_HEADER,
-                Optional.ofNullable(MDC.get(API_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
-        if(!serverHttpRequest.getHeaders().containsKey(TRACE_ID_HEADER)){
-            serverHttpResponse.getHeaders().add(TRACE_ID_HEADER,MDC.get(TRACE_ID));
-        }
-        //serverHttpResponse.getHeaders().add("Access-Control-Allow-Origin","*");
-        return body;
+  @Override
+  public Object beforeBodyWrite(
+      Object body,
+      MethodParameter methodParameter,
+      MediaType mediaType,
+      Class<? extends HttpMessageConverter<?>> aClass,
+      ServerHttpRequest serverHttpRequest,
+      ServerHttpResponse serverHttpResponse) {
+
+    serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
+    serverHttpResponse
+        .getHeaders()
+        .add(
+            API_OPERATION_HEADER,
+            Optional.ofNullable(MDC.get(API_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
+    if (!serverHttpRequest.getHeaders().containsKey(TRACE_ID_HEADER)) {
+      serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
     }
+    // serverHttpResponse.getHeaders().add("Access-Control-Allow-Origin","*");
+    return body;
+  }
 }

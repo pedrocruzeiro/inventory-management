@@ -14,16 +14,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProductResponse {
+public class GetProductsResponse {
 
-  private String id;
-  private String name;
-  private String description;
-  private String manufacturer;
-  private String productId;
-  private String barcode;
-  private BigDecimal price;
-  private List<ProductAttributes> attributes;
-  private BigDecimal stock;
-  private ProductStatusEnum status;
+  long count;
+  List<GetProductResponse> products;
 }
