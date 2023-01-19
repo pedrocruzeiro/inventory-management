@@ -16,11 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateProductResponse {
 
-  private String id;
   private String name;
   private String description;
   private String manufacturer;
-  private String productId;
   private String barcode;
   private BigDecimal price;
   private List<ProductAttributes> attributes;

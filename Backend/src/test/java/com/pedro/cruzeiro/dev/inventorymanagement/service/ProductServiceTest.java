@@ -1,7 +1,9 @@
 package com.pedro.cruzeiro.dev.inventorymanagement.service;
 
+import com.pedro.cruzeiro.dev.inventorymanagement.dto.in.UpdateProductRequest;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.GetProductResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.GetProductsResponse;
+import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.UpdateProductResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.enums.ProductStatusEnum;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.ProductNotFoundException;
 import com.pedro.cruzeiro.dev.inventorymanagement.model.Product;
@@ -23,13 +25,10 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes = {ProductService.class, ModelMapper.class})
 class ProductServiceTest {
 
-  @Autowired private ProductService productService;
-
-  @MockBean private ProductRepository productRepository;
-
   private static Product IPHONE_PRODUCT;
-
   private static Product SAMSUNG_PRODUCT;
+  @Autowired private ProductService productService;
+  @MockBean private ProductRepository productRepository;
 
   @BeforeAll
   static void init() {
@@ -38,9 +37,13 @@ class ProductServiceTest {
         Product.builder()
             .id(UUID.randomUUID().toString())
             .name("Iphone 12")
+            .description("New iphone!")
             .price(BigDecimal.valueOf(499.99))
             .status(ProductStatusEnum.AVAILABLE)
             .stock(BigDecimal.valueOf(2.0))
+            .attributes(Collections.emptyList())
+            .barcode("asdasd-123123-asdasd")
+            .manufacturer("Apple")
             .build();
 
     SAMSUNG_PRODUCT =
@@ -120,5 +123,50 @@ class ProductServiceTest {
 
     verify(productRepository, times(1)).findById("invalid_id");
     verify(productRepository, times(0)).delete(IPHONE_PRODUCT);
+  }
+
+  @Test
+  void UpdateProduct_Success() {
+
+    String newProductName = "Iphone 12 Pro";
+    String newProductDescription =
+        "Best iPhone ever features the powerful A14 Bionic, all-new design with Ceramic Shield, pro camera system, LiDAR Scanner, and the biggest Super Retina XDR display ever on an iPhone.";
+    String newProductBarcode = "12313-asd123-asd123-cx";
+
+    when(productRepository.findById(IPHONE_PRODUCT.getId()))
+        .thenReturn(Optional.ofNullable(IPHONE_PRODUCT));
+
+    Product updatedProduct = IPHONE_PRODUCT;
+    updatedProduct.setName(newProductName);
+    updatedProduct.setDescription(newProductDescription);
+    updatedProduct.setBarcode(newProductBarcode);
+
+    when(productRepository.save(IPHONE_PRODUCT)).thenReturn(IPHONE_PRODUCT);
+
+    UpdateProductRequest updateProductRequest =
+        UpdateProductRequest.builder()
+            .name(newProductName)
+            .description(newProductDescription)
+            .barcode(newProductBarcode)
+            .build();
+
+    UpdateProductResponse updateProductResponse =
+        productService.updateProduct(IPHONE_PRODUCT.getId(), updateProductRequest);
+    verify(productRepository, times(1)).findById(IPHONE_PRODUCT.getId());
+    verify(productRepository, times(1)).save(IPHONE_PRODUCT);
+    assertNotNull(updateProductResponse);
+    assertEquals(newProductName, updateProductResponse.getName());
+    assertEquals(newProductDescription, updateProductResponse.getDescription());
+    assertEquals(newProductBarcode, updateProductResponse.getBarcode());
+  }
+
+  @Test
+  void removeProductUnit_Success() {
+
+    when(productRepository.findById(IPHONE_PRODUCT.getId()))
+            .thenReturn(Optional.ofNullable(IPHONE_PRODUCT));
+    productService.removeStockProduct(IPHONE_PRODUCT.getId(),3);
+    verify(productRepository, times(1)).findById(IPHONE_PRODUCT.getId());
+    verify(productRepository, times(1)).delete(IPHONE_PRODUCT);
   }
 }

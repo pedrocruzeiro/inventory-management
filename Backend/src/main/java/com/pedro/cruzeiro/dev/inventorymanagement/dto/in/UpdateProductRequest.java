@@ -14,8 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateProductRequest {
 
-  private String productId;
-
   private String name;
 
   private String description;

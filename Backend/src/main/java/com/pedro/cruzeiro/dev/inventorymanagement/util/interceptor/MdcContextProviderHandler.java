@@ -58,7 +58,7 @@ public class MdcContextProviderHandler implements HandlerInterceptor {
           MDC.put(TRACE_ID, request.getHeader(TRACE_ID_HEADER));
         }
       }
-      MDC.put(TIMESTAMP,new Timestamp(System.currentTimeMillis()).toString());
+      MDC.put(TIMESTAMP, new Timestamp(System.currentTimeMillis()).toString());
     }
     return true;
   }

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.*;
 
@@ -42,7 +41,8 @@ public class ProductController {
   @CrossOrigin
   public ResponseEntity<CreateProductResponse> createProduct(
       @RequestBody @Valid CreateProductRequest createProductRequest) {
-    return new ResponseEntity<>(productService.createProduct(createProductRequest), HttpStatus.OK);
+    return new ResponseEntity<>(
+        productService.createProduct(createProductRequest), HttpStatus.CREATED);
   }
 
   @PatchMapping("/products/{id}")
@@ -60,16 +60,16 @@ public class ProductController {
   @APIOperation(DELETE_PRODUCT_API_OPERATION)
   @RequiredHeaders(USER_ID)
   @MdcContextHeaders(USER_ID)
-  public ResponseEntity deleteProduct(@PathVariable("id") String productId) {
+  public ResponseEntity<HttpStatus> deleteProduct(@PathVariable("id") String productId) {
     productService.deleteProduct(productId);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @GetMapping("/products/{id}")
   @APIOperation(GET_PRODUCT_API_OPERATION)
   @RequiredHeaders(USER_ID)
   @MdcContextHeaders(USER_ID)
-  public ResponseEntity getProduct(@PathVariable("id") String productId) {
+  public ResponseEntity<GetProductResponse> getProduct(@PathVariable("id") String productId) {
 
     return new ResponseEntity<>(productService.getProduct(productId), HttpStatus.OK);
   }
@@ -84,27 +84,37 @@ public class ProductController {
     return new ResponseEntity<>(productService.getProducts(), HttpStatus.OK);
   }
 
-  @PatchMapping("/products/{id}/restock/{quantity}")
-  @APIOperation(RESTOCK_PRODUCT_API_OPERATION)
+  @PatchMapping("/products/{id}/stock/add/{quantity}")
+  @APIOperation(ADD_STOCK_PRODUCT_API_OPERATION)
   @RequiredHeaders(USER_ID)
   @MdcContextHeaders({USER_ID})
-  public ResponseEntity restockProduct(
+  public ResponseEntity<HttpStatus> addStockProduct(
       @PathVariable("id") String productId, @PathVariable("quantity") Integer quantity) {
 
-    productService.restockProduct(productId, quantity);
+    productService.addStockProduct(productId, quantity);
 
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @PatchMapping("/products/{id}/stock/remove/{quantity}")
+  @APIOperation(REMOVE_STOCK_PRODUCT_API_OPERATION)
+  @RequiredHeaders(USER_ID)
+  @MdcContextHeaders({USER_ID})
+  public ResponseEntity<HttpStatus> removeStockProduct(
+          @PathVariable("id") String productId, @PathVariable("quantity") Integer quantity) {
+
+    productService.removeStockProduct(productId, quantity);
+
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PatchMapping("/products/{id}/status")
   @APIOperation("updateProductAvailability")
   @RequiredHeaders(USER_ID)
   @MdcContextHeaders(USER_ID)
-  public ResponseEntity updateProductAvailability(
+  public ResponseEntity<HttpStatus> updateProductAvailability(
       @PathVariable("id") String productId, @Valid UpdateProductAvailability request) {
-
-    productService.updateProductAvailability(request);
-
-    return new ResponseEntity(HttpStatus.OK);
+    productService.updateProductAvailability(productId, request);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

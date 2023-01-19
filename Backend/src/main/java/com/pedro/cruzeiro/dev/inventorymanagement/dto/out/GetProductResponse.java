@@ -20,7 +20,6 @@ public class GetProductResponse {
   private String name;
   private String description;
   private String manufacturer;
-  private String productId;
   private String barcode;
   private BigDecimal price;
   private List<ProductAttributes> attributes;

@@ -3,3 +3,8 @@ spring:
     name: inventory-management
   profiles:
     active: dev
+
+
+logging:
+  level:
+    root: INFO

@@ -3,8 +3,12 @@ package com.pedro.cruzeiro.dev.inventorymanagement.controller;
 import com.pedro.cruzeiro.dev.inventorymanagement.dto.out.ErrorMessageResponse;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.InvalidResourceStatusException;
 import com.pedro.cruzeiro.dev.inventorymanagement.exception.ProductNotFoundException;
+import com.pedro.cruzeiro.dev.inventorymanagement.exception.ProductUnitException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,13 +21,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.pedro.cruzeiro.dev.inventorymanagement.util.constant.InventoryManagementConstants.*;
 
 @Slf4j
 @ControllerAdvice
+@RequiredArgsConstructor
 public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<Object> {
+
+  private final Tracer tracer;
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(InvalidResourceStatusException.class)
@@ -33,19 +41,27 @@ public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<O
   }
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(ProductNotFoundException.class)
+  @ExceptionHandler({ProductNotFoundException.class})
   public ResponseEntity<ErrorMessageResponse> handleProductNotFoundException(
-          ProductNotFoundException e) {
+      ProductNotFoundException e) {
     return buildErrorMessageResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler({ProductUnitException.class})
+  public ResponseEntity<ErrorMessageResponse> handleProductUnitException(
+          ProductUnitException e) {
+    return buildErrorMessageResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
   private ResponseEntity<ErrorMessageResponse> buildErrorMessageResponseEntity(
       String msg, HttpStatus httpStatus) {
+    String traceId = Objects.requireNonNull(Objects.requireNonNull(tracer.currentSpan()).context().traceId());
     log.error(msg);
     return new ResponseEntity<>(
         ErrorMessageResponse.builder()
             .requestTimestamp(MDC.get(TIMESTAMP))
-            .traceId(MDC.get(TRACE_ID))
+            .traceId(traceId)
             .operation(MDC.get(API_OPERATION))
             .code(httpStatus.value())
             .message(msg)
@@ -68,15 +84,15 @@ public class InventoryManagementControllerAdvice implements ResponseBodyAdvice<O
       ServerHttpRequest serverHttpRequest,
       ServerHttpResponse serverHttpResponse) {
 
-    serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
+
+    String traceId = Objects.requireNonNull(Objects.requireNonNull(tracer.currentSpan()).context().traceId());
+    serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, traceId);
     serverHttpResponse
         .getHeaders()
         .add(
             API_OPERATION_HEADER,
             Optional.ofNullable(MDC.get(API_OPERATION)).orElse(UNDEFINED_SERVICE_OPERATION));
-    if (!serverHttpRequest.getHeaders().containsKey(TRACE_ID_HEADER)) {
-      serverHttpResponse.getHeaders().add(TRACE_ID_HEADER, MDC.get(TRACE_ID));
-    }
+
     // serverHttpResponse.getHeaders().add("Access-Control-Allow-Origin","*");
     return body;
   }

@@ -9,3 +9,4 @@ spring:
       uri: mongodb://localhost:27017/dev
 server:
   port: 8081
+

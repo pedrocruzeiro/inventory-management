@@ -4,17 +4,16 @@ public class InventoryManagementConstants {
 
   /** Operations */
   public static final String GET_PRODUCTS_API_OPERATION = "getProducts";
-
   public static final String GET_PRODUCT_API_OPERATION = "getProduct";
   public static final String CREATE_PRODUCT_API_OPERATION = "createProduct";
   public static final String UPDATE_PRODUCT_API_OPERATION = "updateProduct";
   public static final String DELETE_PRODUCT_API_OPERATION = "DeleteProduct";
-  public static final String RESTOCK_PRODUCT_API_OPERATION = "RestockItem";
+  public static final String ADD_STOCK_PRODUCT_API_OPERATION = "AddStockItem";
+  public static final String REMOVE_STOCK_PRODUCT_API_OPERATION = "RemoveStockItem";
   public static final String UNDEFINED_SERVICE_OPERATION = "Undefined";
 
   /** MDC Keys */
   public static final String USER_ID = "userId";
-
   public static final String API_OPERATION = "operation";
   public static final String TRACE_ID = "trace-id";
   public static final String TIMESTAMP = "timestamp";

@@ -3,6 +3,15 @@ All technical changes ill be documented in this file.
 
 ## [Unreleased]
 
+## [0.0.9] - 2023-01-18
+### Added
+* Added tracing with sleuth
+* Added custom logging with logback.xml
+* Added Update Product Availability service operation
+* Added Restock Product service operation
+### Changed
+* Updated multiple operations with info logs.
+
 ## [0.0.8] - 2023-01-16
 ### Added
 * Added Update Product service operation
