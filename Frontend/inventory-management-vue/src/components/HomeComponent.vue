@@ -162,7 +162,7 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="headline">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="headline">Are you sure you want to delete this product?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
@@ -220,7 +220,7 @@ import axios from "axios";
             text: 'Product Id',
             align: 'start',
             filterable: false,
-            value: 'productId',
+            value: 'id',
           },
           { text: 'Name', value: 'name' },
           { text: 'Description', value: 'description' },
@@ -269,7 +269,6 @@ import axios from "axios";
         "name": item.name,
         "description": item.description,
         "manufacturer": item.manufacturer,
-        "productId": item.productId,
         "barcode": item.barcode,
         "price": item.price,
         "stock": item.stock,
@@ -286,22 +285,11 @@ import axios from "axios";
       })
       
     },
-      getPosts(){
-      axios.get("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => {
-        console.log(response.data)
-        this.posts = response.data
-        this.myloadingvariable = false
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-    },
     getProducts(){
       axios.get("http://localhost:8081/v1/products")
       .then((response) => {
         console.log(response.data)
-        this.products = response.data
+        this.products = response.data.products
         this.myloadingvariable = false
       })
       .catch((error) => {
